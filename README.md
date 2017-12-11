@@ -126,4 +126,7 @@ translator.Proxy = proxy;
 ```
 
 ## LICENSE
-MIT
+
+Released under the [MIT](https://opensource.org/licenses/MIT) License.
+
+This repository сontains part of the code from the library [google-translate-token](https://github.com/matheuss/google-translate-token)
