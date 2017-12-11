@@ -25,7 +25,10 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <DocumentationFile>bin\Debug\GoogleTranslateFreeApi.XML</DocumentationFile>
-    <NoWarn>1591</NoWarn>
+    <NoWarn>
+    </NoWarn>
+    <WarningsAsErrors>
+    </WarningsAsErrors>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -34,6 +37,7 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <DocumentationFile>bin\Release\GoogleTranslateFreeApi.xml</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
     <!-- A reference to the entire .NET Framework is automatically included -->
@@ -43,7 +47,6 @@
     <Compile Include="GoogleKeyTokenGenerator.cs" />
     <Compile Include="GoogleTranslateIPBannedException.cs" />
     <Compile Include="GoogleTranslator.cs" />
-    <Compile Include="GoogleTranslatorLite.cs" />
     <Compile Include="ITranslatable.cs" />
     <Compile Include="ITranslator.cs" />
     <Compile Include="Language.cs" />
