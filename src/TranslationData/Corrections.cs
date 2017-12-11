@@ -1,6 +1,6 @@
 ﻿namespace GoogleTranslateFreeApi.TranslationData
 {
-	public class Corrections
+	public sealed class Corrections
 	{
 		public bool TextWasCorrected { get; internal set; }
 		public bool LanguageWasCorrected { get; internal set; }

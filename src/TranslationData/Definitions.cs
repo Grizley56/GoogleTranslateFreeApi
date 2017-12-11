@@ -6,7 +6,7 @@ using Newtonsoft.Json.Linq;
 
 namespace GoogleTranslateFreeApi.TranslationData
 {
-	public class Definitions : TranslationInfoParser
+	public sealed class Definitions : TranslationInfoParser
 	{
 		public class Definition
 		{
@@ -17,28 +17,24 @@ namespace GoogleTranslateFreeApi.TranslationData
 				Explanation = explantion;
 				Example = example;
 			}
-
-			public override string ToString()
-			{
-				return $"Explantion: {Explanation} Example: {Example}";
-			}
 			
+			public override string ToString() => $"Explantion: {Explanation} Example: {Example}";
 		}
 
-		public IEnumerable<Definition> Noun { get; internal set; }
-		public IEnumerable<Definition> Verb { get; internal set; }
-		public IEnumerable<Definition> Exclamation { get; internal set; }
-		public IEnumerable<Definition> Adjective { get; internal set; }
-		public IEnumerable<Definition> Adverb { get; internal set; }
-		public IEnumerable<Definition> Abbreviation { get; internal set; }
-		public IEnumerable<Definition> Article { get; internal set; }
-		public IEnumerable<Definition> Preposition { get; internal set; }
-		public IEnumerable<Definition> Suffix { get; internal set; }
-		public IEnumerable<Definition> Conjunction { get; internal set; }
-		public IEnumerable<Definition> Pronoun { get; internal set; }
-		public IEnumerable<Definition> Prefix { get; internal set; }
-		public IEnumerable<Definition> Symbol { get; internal set; }
-		public IEnumerable<Definition> Contraction { get; internal set; }
+		public Definition[] Noun { get; internal set; }
+		public Definition[] Verb { get; internal set; }
+		public Definition[] Exclamation { get; internal set; }
+		public Definition[] Adjective { get; internal set; }
+		public Definition[] Adverb { get; internal set; }
+		public Definition[] Abbreviation { get; internal set; }
+		public Definition[] Article { get; internal set; }
+		public Definition[] Preposition { get; internal set; }
+		public Definition[] Suffix { get; internal set; }
+		public Definition[] Conjunction { get; internal set; }
+		public Definition[] Pronoun { get; internal set; }
+		public Definition[] Prefix { get; internal set; }
+		public Definition[] Symbol { get; internal set; }
+		public Definition[] Contraction { get; internal set; }
 
 
 		public override string ToString()
@@ -86,7 +82,7 @@ namespace GoogleTranslateFreeApi.TranslationData
 				let explantion = (string) definitionUnformatted[0] 
 				let example = (string) definitionUnformatted[definitionUnformatted.Count() - 1] 
 				select new Definition(explantion, example)
-				).ToList();
+				).ToArray();
 
 			property.SetMethod.Invoke(this, new object[] { definitions });
 			

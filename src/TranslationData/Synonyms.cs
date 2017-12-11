@@ -8,14 +8,14 @@ namespace GoogleTranslateFreeApi.TranslationData
 {
 	public sealed class Synonyms: TranslationInfoParser
 	{
-		public IEnumerable<string> Noun { get; internal set; }
-		public IEnumerable<string> Exclamation { get; internal set; }
-		public IEnumerable<string> Adjective { get; internal set; }
-		public IEnumerable<string> Verb { get; internal set; }
-		public IEnumerable<string> Adverb { get; internal set; }
-		public IEnumerable<string> Preposition { get; internal set; }
-		public IEnumerable<string> Conjunction { get; internal set; }
-		public IEnumerable<string> Pronoun { get; internal set; }
+		public string[] Noun { get; internal set; }
+		public string[] Exclamation { get; internal set; }
+		public string[] Adjective { get; internal set; }
+		public string[] Verb { get; internal set; }
+		public string[] Adverb { get; internal set; }
+		public string[] Preposition { get; internal set; }
+		public string[] Conjunction { get; internal set; }
+		public string[] Pronoun { get; internal set; }
 
 		internal Synonyms() { }
 
@@ -54,7 +54,7 @@ namespace GoogleTranslateFreeApi.TranslationData
 			foreach (var synonymsSet in parseInformation)
 				synonyms.AddRange(synonymsSet[0].ToObject<string[]>());
 			
-			property.SetMethod.Invoke(this, new object[] { synonyms });
+			property.SetMethod.Invoke(this, new object[] { synonyms.ToArray() });
 			
 			return true;
 		}
