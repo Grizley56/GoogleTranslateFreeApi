@@ -155,10 +155,12 @@ namespace GoogleTranslateFreeApi
 			{
 				response = (HttpWebResponse) await request.GetResponseAsync();
 			}
-			catch (WebException)
+			catch (WebException e)
 			{
 				if (_generator.IsExternalKeyObsolete)
 					await TranslateAsync(originalText, fromLanguage, toLanguage);
+				else if ((int)e.Status == 7) //ProtocolError
+					throw new GoogleTranslateIPBannedException(GoogleTranslateIPBannedException.Operation.Translation);
 				else
 					throw;
 			}

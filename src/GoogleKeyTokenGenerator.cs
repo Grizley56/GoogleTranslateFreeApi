@@ -83,12 +83,25 @@ namespace GoogleTranslateFreeApi
 		protected virtual async Task<ExternalKey> GetNewExternalKeyAsync()
 		{
 			HttpWebRequest request = WebRequest.CreateHttp(_address);
+			HttpWebResponse response;
 			request.Proxy = Proxy;
 			request.ContinueTimeout = (int)TimeOut.TotalMilliseconds;
 			request.ContentType = "application/x-www-form-urlencoded";
 
-			var response = (HttpWebResponse) await request.GetResponseAsync();
-
+			
+			try
+			{
+				response = (HttpWebResponse) await request.GetResponseAsync();
+			}
+			catch (WebException e)
+			{
+				if((int)e.Status == 7) //ProtocolError
+					throw new GoogleTranslateIPBannedException(
+						GoogleTranslateIPBannedException.Operation.TokenGeneration);
+				
+				throw;
+			}
+			
 			string result;
 
 			using (StreamReader streamReader = new StreamReader(response.GetResponseStream()))
