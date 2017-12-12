@@ -121,7 +121,7 @@ foreach(ExtraTranslation item in result4.ExtraTranslations)
 ---
 Google Translate can ban IP that sends too many requests at the same time. Ban lasts about a few hours, but you can use a Proxy
 ```C#
-var WebProxy = new WebProxy(uri); // You also can use GoogleTranslateFreeApi.Proxy class for this
+var proxy = new WebProxy(uri); // You also can use GoogleTranslateFreeApi.Proxy class for this
 translator.Proxy = proxy;
 ```
 
