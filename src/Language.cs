@@ -1,16 +1,21 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.Serialization;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace GoogleTranslateFreeApi
 {
+	[DataContract]
 	public class Language
 	{
 		public static Language Auto = new Language("Automatic", "auto");
-		public string FullName { get; }
-		public string ISO639 { get; }
+		
+		[DataMember]
+		public string FullName { get; private set; }
+		[DataMember]
+		public string ISO639 { get; private set; }
 
 		public Language(string fullName, string iso639)
 		{
@@ -36,7 +41,6 @@ namespace GoogleTranslateFreeApi
 		{
 			return StringComparer.OrdinalIgnoreCase.GetHashCode(ISO639);
 		}
-
 
 		public override string ToString()
 		{

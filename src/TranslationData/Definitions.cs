@@ -2,16 +2,20 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.Serialization;
 using Newtonsoft.Json.Linq;
 
 namespace GoogleTranslateFreeApi.TranslationData
 {
+	[DataContract]
 	public sealed class Definitions : TranslationInfoParser
 	{
-		public class Definition
+		[DataContract]
+		public sealed class Definition
 		{
-			public string Explanation { get; }
-			public string Example { get; }
+			[DataMember] public string Explanation { get; private set; }
+			[DataMember] public string Example { get; private set; }
+			
 			internal Definition(string explantion, string example)
 			{
 				Explanation = explantion;
@@ -21,20 +25,20 @@ namespace GoogleTranslateFreeApi.TranslationData
 			public override string ToString() => $"Explantion: {Explanation} Example: {Example}";
 		}
 
-		public Definition[] Noun { get; internal set; }
-		public Definition[] Verb { get; internal set; }
-		public Definition[] Exclamation { get; internal set; }
-		public Definition[] Adjective { get; internal set; }
-		public Definition[] Adverb { get; internal set; }
-		public Definition[] Abbreviation { get; internal set; }
-		public Definition[] Article { get; internal set; }
-		public Definition[] Preposition { get; internal set; }
-		public Definition[] Suffix { get; internal set; }
-		public Definition[] Conjunction { get; internal set; }
-		public Definition[] Pronoun { get; internal set; }
-		public Definition[] Prefix { get; internal set; }
-		public Definition[] Symbol { get; internal set; }
-		public Definition[] Contraction { get; internal set; }
+		[DataMember] public Definition[] Noun { get; internal set; }
+		[DataMember] public Definition[] Verb { get; internal set; }
+		[DataMember] public Definition[] Exclamation { get; internal set; }
+		[DataMember] public Definition[] Adjective { get; internal set; }
+		[DataMember] public Definition[] Adverb { get; internal set; }
+		[DataMember] public Definition[] Abbreviation { get; internal set; }
+		[DataMember] public Definition[] Article { get; internal set; }
+		[DataMember] public Definition[] Preposition { get; internal set; }
+		[DataMember] public Definition[] Suffix { get; internal set; }
+		[DataMember] public Definition[] Conjunction { get; internal set; }
+		[DataMember] public Definition[] Pronoun { get; internal set; }
+		[DataMember] public Definition[] Prefix { get; internal set; }
+		[DataMember] public Definition[] Symbol { get; internal set; }
+		[DataMember] public Definition[] Contraction { get; internal set; }
 
 
 		public override string ToString()

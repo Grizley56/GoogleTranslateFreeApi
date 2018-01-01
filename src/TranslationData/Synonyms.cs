@@ -2,20 +2,22 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.Serialization;
 using Newtonsoft.Json.Linq;
 
 namespace GoogleTranslateFreeApi.TranslationData
 {
+	[DataContract]
 	public sealed class Synonyms: TranslationInfoParser
 	{
-		public string[] Noun { get; internal set; }
-		public string[] Exclamation { get; internal set; }
-		public string[] Adjective { get; internal set; }
-		public string[] Verb { get; internal set; }
-		public string[] Adverb { get; internal set; }
-		public string[] Preposition { get; internal set; }
-		public string[] Conjunction { get; internal set; }
-		public string[] Pronoun { get; internal set; }
+		[DataMember] public string[] Noun { get; internal set; }
+		[DataMember] public string[] Exclamation { get; internal set; }
+		[DataMember] public string[] Adjective { get; internal set; }
+		[DataMember] public string[] Verb { get; internal set; }
+		[DataMember] public string[] Adverb { get; internal set; }
+		[DataMember] public string[] Preposition { get; internal set; }
+		[DataMember] public string[] Conjunction { get; internal set; }
+		[DataMember] public string[] Pronoun { get; internal set; }
 
 		internal Synonyms() { }
 

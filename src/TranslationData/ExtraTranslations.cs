@@ -4,17 +4,20 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.InteropServices.ComTypes;
+using System.Runtime.Serialization;
 using Newtonsoft.Json.Linq;
 using Newtonsoft.Json.Schema;
 
 namespace GoogleTranslateFreeApi.TranslationData
 {
+	[DataContract]
 	public sealed class ExtraTranslations : TranslationInfoParser
 	{
-		public class ExtraTranslation
+		[DataContract]
+		public sealed class ExtraTranslation
 		{
-			public string Phrase { get; }
-			public string[] PhraseTranslations { get; }
+			[DataMember] public string Phrase { get; private set; }
+			[DataMember] public string[] PhraseTranslations { get; private set; }
 
 			internal ExtraTranslation(string phrase, string[] phraseTranslations)
 			{
@@ -25,20 +28,20 @@ namespace GoogleTranslateFreeApi.TranslationData
 			public override string ToString() => $"{Phrase}: {String.Join(", ", PhraseTranslations)}";
 		}
 		
-		public ExtraTranslation[] Noun { get; internal set; }
-		public ExtraTranslation[] Verb { get; internal set; }
-		public ExtraTranslation[] Pronoun { get;  internal set; }
-		public ExtraTranslation[] Adverb { get; internal set; }
-		public ExtraTranslation[] AuxiliaryVerb { get; internal set; }
-		public ExtraTranslation[] Adjective { get; internal set; }
-		public ExtraTranslation[] Conjunction { get; internal set; }
-		public ExtraTranslation[] Preposition { get; internal set; }
-		public ExtraTranslation[] Interjection { get; internal set; }
-		public ExtraTranslation[] Suffix { get; internal set; }
-		public ExtraTranslation[] Prefix { get; internal set; }
-		public ExtraTranslation[] Abbreviation { get; internal set; }
-		public ExtraTranslation[] Particle { get; internal set; }
-		public ExtraTranslation[] Phrase { get; internal set; }
+		[DataMember] public ExtraTranslation[] Noun { get; internal set; }
+		[DataMember] public ExtraTranslation[] Verb { get; internal set; }
+		[DataMember] public ExtraTranslation[] Pronoun { get;  internal set; }
+		[DataMember] public ExtraTranslation[] Adverb { get; internal set; }
+		[DataMember] public ExtraTranslation[] AuxiliaryVerb { get; internal set; }
+		[DataMember] public ExtraTranslation[] Adjective { get; internal set; }
+		[DataMember] public ExtraTranslation[] Conjunction { get; internal set; }
+		[DataMember] public ExtraTranslation[] Preposition { get; internal set; }
+		[DataMember] public ExtraTranslation[] Interjection { get; internal set; }
+		[DataMember] public ExtraTranslation[] Suffix { get; internal set; }
+		[DataMember] public ExtraTranslation[] Prefix { get; internal set; }
+		[DataMember] public ExtraTranslation[] Abbreviation { get; internal set; }
+		[DataMember] public ExtraTranslation[] Particle { get; internal set; }
+		[DataMember] public ExtraTranslation[] Phrase { get; internal set; }
 		
 		public ExtraTranslations() { }
 
@@ -88,12 +91,6 @@ namespace GoogleTranslateFreeApi.TranslationData
 			for (int i = 0; i < parseInformation.Count(); i++)
 				extraTranslations[i] = new ExtraTranslation(
 					(string) parseInformation[i][0], parseInformation[i][1].ToObject<string[]>());
-			
-//			ExtraTranslation extraTranslation = new ExtraTranslation(
-//				(string)parseInformation[0], parseInformation[1].ToObject<string[]>());
-			
-//			var translations = parseInformation.ToDictionary(translation => 
-//				(string) translation[0], translation => translation[1].ToObject<string[]>());
 
 			property.SetMethod.Invoke(this,
 				new object[] { extraTranslations } );
