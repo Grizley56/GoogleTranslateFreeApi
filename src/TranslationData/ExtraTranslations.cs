@@ -46,12 +46,12 @@ namespace GoogleTranslateFreeApi.TranslationData
 		public ExtraTranslations() { }
 
 		
-		private string FormatOutput(IEnumerable<ExtraTranslation> formatData, string partOfSpretchName)
+		private string FormatOutput(IEnumerable<ExtraTranslation> formatData, string partOfSpeechName)
 		{
 			if(formatData == null)
 				return String.Empty;
 			
-			string result = partOfSpretchName + ":\n";
+			string result = partOfSpeechName + ":\n";
 
 			return formatData.Aggregate(result, (current, data) 
 				=> current + $"{data.Phrase}: {String.Join(", ", data.PhraseTranslations)}\n");

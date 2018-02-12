@@ -36,14 +36,14 @@ namespace GoogleTranslateFreeApi.TranslationData
 			return info.TrimEnd();
 		}
 
-		private string FormatOutput(IEnumerable<string> partOfSpretchData, string partOfSpretchName)
+		private string FormatOutput(IEnumerable<string> partOfSpeechData, string partOfSpeechName)
 		{
-			if (partOfSpretchData == null)
+			if (partOfSpeechData == null)
 				return String.Empty;
 
-			return !partOfSpretchData.Any()
+			return !partOfSpeechData.Any()
 				? String.Empty
-				: $"{partOfSpretchName}: {string.Join(", ", partOfSpretchData)} \n";
+				: $"{partOfSpeechName}: {string.Join(", ", partOfSpeechData)} \n";
 		}
 
 		internal override bool TryParseMemberAndAdd(string memberName, JToken parseInformation)

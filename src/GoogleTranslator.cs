@@ -194,11 +194,9 @@ namespace GoogleTranslateFreeApi
 												"tsel=0&" +
 												"kc=7";
 
-			StringContent queryString = new StringContent(postData, Encoding.UTF8, "application/x-www-form-urlencoded");
-
 			HttpWebRequest request = WebRequest.CreateHttp(_address);
 			request.Proxy = Proxy;
-			request.ContentType = "application/x-www-form-urlencoded";
+			request.ContentType = "text/plain";
 			request.Method = HttpMethod.Post.Method;
 			request.ContinueTimeout = (int)TimeOut.TotalMilliseconds;
 
@@ -289,20 +287,20 @@ namespace GoogleTranslateFreeApi
 			
 		  foreach (var item in response)
 		  {
-			  string partOfSpretch = (string)item[0];
+			  string partOfSpeech = (string)item[0];
 
 			  JToken itemToken = translationInfoObject.ItemDataIndex == -1 ? item : item[translationInfoObject.ItemDataIndex];
 				
 			  //////////////////////////////////////////////////////////////
 			  // I delete the white spaces to work auxiliary verb as well //
 			  //////////////////////////////////////////////////////////////
-			  if (!translationInfoObject.TryParseMemberAndAdd(partOfSpretch.Replace(' ', '\0'), itemToken))
+			  if (!translationInfoObject.TryParseMemberAndAdd(partOfSpeech.Replace(' ', '\0'), itemToken))
 			  {
 					#if DEBUG
 				  //sometimes response contains members without name. Just ignore it.
-				  Debug.WriteLineIf(partOfSpretch.Trim() != String.Empty, 
+				  Debug.WriteLineIf(partOfSpeech.Trim() != String.Empty, 
 					  $"class {typeof(T).Name} dont contains a member for a part " +
-					  $"of spretch {partOfSpretch}");
+					  $"of speech {partOfSpeech}");
 					#endif
 			  }
 		  }

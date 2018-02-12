@@ -63,13 +63,13 @@ namespace GoogleTranslateFreeApi.TranslationData
 			return info.Trim();
 		}
 
-		private string FormatOutput(IEnumerable<Definition> formatData, string partOfSpretchName)
+		private string FormatOutput(IEnumerable<Definition> formatData, string partOfSpeechName)
 		{
 			if (formatData == null || !formatData.Any())
 				return String.Empty;
 			
 			int i = 1;
-			string tmp = '\n' + partOfSpretchName + ':';
+			string tmp = '\n' + partOfSpeechName + ':';
 			return formatData.Aggregate(
 				tmp, (current, definition) => current + ($"\n{i++}) " + definition.ToString()));
 		}
