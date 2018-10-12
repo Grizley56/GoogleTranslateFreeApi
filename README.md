@@ -35,7 +35,7 @@ var translator = new GoogleTranslator();
 Language from = Language.Auto;
 Language to = GoogleTranslator.GetLanguageByName("Japanese");
 
-TranslateResult result = await translator.TranslateLiteAsync("Hello. How are you?", from, to);
+TranslationResult result = await translator.TranslateLiteAsync("Hello. How are you?", from, to);
 
 //The result is separated by the suggestions and the '\n' symbols
 string[] resultSeparated = result.FragmentedTranslation;
