@@ -72,7 +72,7 @@ namespace GoogleTranslateFreeApi
 				}
 				catch (ExternalKeyParseException)
 				{
-					throw new NotSupportedException();
+					throw new NotSupportedException("The method is no longer valid, or something went wrong");
 				}
 
 			long time = DecrypthAlgorythm(source);
@@ -87,7 +87,6 @@ namespace GoogleTranslateFreeApi
 			request.Proxy = Proxy;
 			request.ContinueTimeout = (int)TimeOut.TotalMilliseconds;
 			request.ContentType = "application/x-www-form-urlencoded";
-
 			
 			try
 			{
@@ -107,36 +106,32 @@ namespace GoogleTranslateFreeApi
 			using (StreamReader streamReader = new StreamReader(response.GetResponseStream()))
 				result = await streamReader.ReadToEndAsync();
 
-
-			long number1, number2;
-			string textNumber1, textNumber2;
+			long tkk;
 
 			try
 			{
-				int index = result.IndexOf((@"var a\x3d"), StringComparison.Ordinal);
-				textNumber1 = result.GetTextBetween(@"var a\x3d", ";", index);
-				textNumber2 = result.GetTextBetween(@"var b\x3d", ";", index);
-				
-				if(textNumber1 == null || textNumber2 == null)
-					throw new ExternalKeyParseException();
+				var tkkText = result.GetTextBetween(@"TKK='", "';");
+
+				if (tkkText == null)
+					throw new ExternalKeyParseException("Unknown TKK position");
+
+				var splitted = tkkText.Split('.');
+				if (splitted.Length != 2 || !long.TryParse(splitted[1], out tkk))
+					throw new ExternalKeyParseException($"Unknown TKK format. TKK: {tkkText}");
+
 			}
 			catch (ArgumentException)
 			{
 				throw new ExternalKeyParseException();
 			}
 
-
-			if (!long.TryParse(textNumber1, out number1) || !long.TryParse(textNumber2, out number2))
-				throw new ExternalKeyParseException();
-
-			ExternalKey newExternalKey = new ExternalKey(UnixTotalHours, number1 + number2);
+			ExternalKey newExternalKey = new ExternalKey(UnixTotalHours, tkk);
 			return newExternalKey;
 		}
 		
 		[DebuggerHidden]
 		private long DecrypthAlgorythm(string source)
 		{
-
 			List<long> code = new List<long>();
 
 			for (int g = 0; g < source.Length; g++)

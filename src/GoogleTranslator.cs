@@ -17,6 +17,7 @@ namespace GoogleTranslateFreeApi
   public class GoogleTranslator: ITranslator
   {
     private readonly GoogleKeyTokenGenerator _generator;
+	  private readonly HttpClient _httpClient;
 
 		protected Uri _address;
 		protected TimeSpan _timeOut;
@@ -96,6 +97,7 @@ namespace GoogleTranslateFreeApi
 		{
 			_address = new Uri($"https://{domain}/translate_a/single");
 			_generator = new GoogleKeyTokenGenerator();
+			_httpClient = new HttpClient();
 		}
 
 	  /// <summary>
@@ -177,7 +179,6 @@ namespace GoogleTranslateFreeApi
 			if (originalText.Trim() == String.Empty)
 				return new TranslationResult();
 
-
 			string token = await _generator.GenerateAsync(originalText);
 
 			string postData = $"sl={fromLanguage.ISO639}&" +
@@ -194,37 +195,23 @@ namespace GoogleTranslateFreeApi
 												"tsel=0&" +
 												"kc=7";
 
-			HttpWebRequest request = WebRequest.CreateHttp(_address);
-			request.Proxy = Proxy;
-			request.ContentType = "text/plain";
-			request.Method = HttpMethod.Post.Method;
-			request.ContinueTimeout = (int)TimeOut.TotalMilliseconds;
-
-			byte[] bytesArray = Encoding.UTF8.GetBytes(postData);
-
-			Stream s = await request.GetRequestStreamAsync();
-			s.Write(bytesArray, 0, bytesArray.Length);
-
-			HttpWebResponse response = null;
-
-			try
-			{
-				response = (HttpWebResponse) await request.GetResponseAsync();
-			}
-			catch (WebException e)
-			{
-				if (_generator.IsExternalKeyObsolete)
-					await TranslateAsync(originalText, fromLanguage, toLanguage);
-				else if ((int)e.Status == 7) //ProtocolError
-					throw new GoogleTranslateIPBannedException(GoogleTranslateIPBannedException.Operation.Translation);
-				else
-					throw;
-			}
-
 			string result;
-			using (StreamReader sr = new StreamReader(response.GetResponseStream()))
-				result = sr.ReadToEnd();
 
+		  try
+		  {
+			  result = await _httpClient.GetStringAsync($"{_address}?{postData}");
+		  }
+		  catch(WebException ex)
+		  {
+				if (_generator.IsExternalKeyObsolete)
+					return await TranslateAsync(originalText, fromLanguage, toLanguage);
+
+			  if ((int)ex.Status == 7) //ProtocolError
+				  throw new GoogleTranslateIPBannedException(GoogleTranslateIPBannedException.Operation.Translation);
+			  
+				throw;
+			}
+			
 			return ResponseToTranslateResultParse(result, originalText, fromLanguage, toLanguage, additionInfo);
 	  }
 	  

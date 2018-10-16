@@ -9,6 +9,9 @@ namespace GoogleTranslateFreeApi
 	class ExternalKeyParseException : Exception
 	{
 		public ExternalKeyParseException()
-			:base("External key parse failed") { }
+			:this("External key parse failed") { }
+
+		public ExternalKeyParseException(string message)
+			:base(message) { }
 	}
 }
