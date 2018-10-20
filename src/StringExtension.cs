@@ -38,7 +38,7 @@ namespace GoogleTranslateFreeApi
 			string[] words = src.Split(new char[] {' '}, StringSplitOptions.RemoveEmptyEntries);
 
 			return string.Concat(words.Select(word
-				=> Char.ToUpper(word[0]) + word.Substring(1).ToLower()));
+				=> char.ToUpper(word[0]) + word.Substring(1).ToLower()));
 		}
 		
 	}

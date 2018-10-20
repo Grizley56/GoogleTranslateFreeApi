@@ -14,7 +14,10 @@ using Newtonsoft.Json.Linq;
 
 namespace GoogleTranslateFreeApi
 {
-  public class GoogleTranslator: ITranslator
+	/// <summary>
+	/// Represent a class for translate the text using <see href="http://translate.google.com"/>
+	/// </summary>
+	public class GoogleTranslator: ITranslator
   {
     private readonly GoogleKeyTokenGenerator _generator;
 	  private readonly HttpClient _httpClient;
@@ -48,6 +51,7 @@ namespace GoogleTranslateFreeApi
 				_generator.Proxy = value;
 			}
 		}
+
 		public string Domain
 		{
 			get { return _address.AbsoluteUri.GetTextBetween("https://", "/translate_a/single"); }
@@ -66,15 +70,24 @@ namespace GoogleTranslateFreeApi
 			=> LanguagesSupported.FirstOrDefault(i
 				=> i.FullName.Equals(language, StringComparison.OrdinalIgnoreCase));
 
+	  /// <param name="iso">ISO of the required language</param>
+	  /// <example>GoogleTranslator.GetLangaugeByISO("en")</example>
+	  /// <returns>Language object from the LanguagesSupported array</returns>
+	  // ReSharper disable once InconsistentNaming
 		public static Language GetLanguageByISO(string iso)
 			=> LanguagesSupported.FirstOrDefault(i
 				=> i.ISO639.Equals(iso, StringComparison.OrdinalIgnoreCase));
 
+		/// <summary>
+		/// Check is available language to translate
+		/// </summary>
+		/// <param name="language">Checked <see cref="Language"/> </param>
+		/// <returns>Is it available language or not</returns>
 		public static bool IsLanguageSupported(Language language)
 		{
 			if (language.Equals(Language.Auto))
 				return true;
-
+			
 			return LanguagesSupported.Contains(language) ||
 						 LanguagesSupported.FirstOrDefault(language.Equals) != null;
 		}
@@ -108,7 +121,7 @@ namespace GoogleTranslateFreeApi
 		/// <param name="originalText">Text to translate</param>
 		/// <param name="fromLanguage">Source language</param>
 		/// <param name="toLanguage">Target language</param>
-		/// <exception cref="LanguageNotSupportException">Language is not supported</exception>
+		/// <exception cref="LanguageIsNotSupportedException">Language is not supported</exception>
 		/// <exception cref="InvalidOperationException">Thrown when target language is auto</exception>
 	  /// <exception cref="GoogleTranslateIPBannedException">Thrown when the IP used for requests is banned </exception>
 		/// <exception cref="WebException">Thrown when getting an error with response</exception>
@@ -123,7 +136,7 @@ namespace GoogleTranslateFreeApi
 		/// </p>
 		/// </summary>
 		/// <param name="item">The object that implements the interface ITranslatable</param>
-		/// <exception cref="LanguageNotSupportException">Language is not supported</exception>
+		/// <exception cref="LanguageIsNotSupportedException">Language is not supported</exception>
 		/// <exception cref="InvalidOperationException">Thrown when target language is auto</exception>
 		/// <exception cref="GoogleTranslateIPBannedException">Thrown when the IP used for requests is banned </exception>
 		/// <exception cref="WebException">Thrown when getting an error with response</exception>
@@ -141,7 +154,7 @@ namespace GoogleTranslateFreeApi
 	  /// <param name="originalText">Text to translate</param>
 	  /// <param name="fromLanguage">Source language</param>
 	  /// <param name="toLanguage">Target language</param>
-	  /// <exception cref="LanguageNotSupportException">Language is not supported</exception>
+	  /// <exception cref="LanguageIsNotSupportedException">Language is not supported</exception>
 	  /// <exception cref="InvalidOperationException">Thrown when target language is auto</exception>
 	  /// <exception cref="GoogleTranslateIPBannedException">Thrown when the IP used for requests is banned </exception>
 	  /// <exception cref="WebException">Thrown when getting an error with response</exception>
@@ -157,7 +170,7 @@ namespace GoogleTranslateFreeApi
 	  /// </p>
 	  /// </summary>
 	  /// <param name="item">The object that implements the interface ITranslatable</param>
-	  /// <exception cref="LanguageNotSupportException">Language is not supported</exception>
+	  /// <exception cref="LanguageIsNotSupportedException">Language is not supported</exception>
 	  /// <exception cref="InvalidOperationException">Thrown when target language is auto</exception>
 	  /// <exception cref="GoogleTranslateIPBannedException">Thrown when the IP used for requests is banned </exception>
 	  /// <exception cref="WebException">Thrown when getting an error with response</exception>
@@ -166,13 +179,13 @@ namespace GoogleTranslateFreeApi
 		  return await TranslateLiteAsync(item.OriginalText, item.FromLanguage, item.ToLanguage);
 	  }
 	  
-	  protected async virtual Task<TranslationResult> GetTranslationResultAsync(string originalText, Language fromLanguage,
+	  protected virtual async Task<TranslationResult> GetTranslationResultAsync(string originalText, Language fromLanguage,
 		  Language toLanguage, bool additionInfo)
 	  {
 		  if (!IsLanguageSupported(fromLanguage))
-				throw new LanguageNotSupportException(fromLanguage);
+				throw new LanguageIsNotSupportedException(fromLanguage);
 			if (!IsLanguageSupported(toLanguage))
-				throw new LanguageNotSupportException(toLanguage);
+				throw new LanguageIsNotSupportedException(toLanguage);
 			if (toLanguage.Equals(Language.Auto))
 				throw new InvalidOperationException("A destination Language is auto");
 

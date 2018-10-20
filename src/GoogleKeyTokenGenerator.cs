@@ -10,13 +10,28 @@ using System.Threading.Tasks;
 
 namespace GoogleTranslateFreeApi
 {
+	/// <summary>
+	/// GoogleTranslate token generator
+	/// </summary>
 	public class GoogleKeyTokenGenerator
 	{
+		/// <summary>
+		/// GoogleTranslate token
+		/// </summary>
 		protected struct ExternalKey
 		{
+			/// <summary>
+			/// Total hours
+			/// </summary>
 			public long Time { get; }
+
+			/// <summary>
+			/// Token value
+			/// </summary>
 			public long Value { get; }
 
+			/// <param name="time">Unix-formatted total hours</param>
+			/// <param name="value">Token value</param>
 			public ExternalKey(long time, long value)
 			{
 				Time = time;
@@ -24,10 +39,19 @@ namespace GoogleTranslateFreeApi
 			}
 		}
 
-		protected ExternalKey _currentExternalKey;
+		/// <summary>
+		/// Using external key 
+		/// </summary>
+		protected ExternalKey CurrentExternalKey;
+		/// <summary>
+		/// Address for sending requests
+		/// </summary>
+		protected readonly Uri Address = new Uri("https://translate.google.com");
 
-		protected readonly Uri _address = new Uri("https://translate.google.com");
 
+		/// <summary>
+		/// 
+		/// </summary>
 		protected int UnixTotalHours
 		{
 			get
@@ -39,7 +63,7 @@ namespace GoogleTranslateFreeApi
 		/// <summary>
 		/// True, if the current key cannot be used for a token generate
 		/// </summary>
-		public bool IsExternalKeyObsolete => _currentExternalKey.Time != UnixTotalHours;
+		public bool IsExternalKeyObsolete => CurrentExternalKey.Time != UnixTotalHours;
 
 		
 		/// <summary>
@@ -52,13 +76,16 @@ namespace GoogleTranslateFreeApi
 		/// </summary>
 		public TimeSpan TimeOut { get; set; } = TimeSpan.FromSeconds(10);
 
+		/// <summary>
+		/// Initializes a new instance of the <see cref="GoogleKeyTokenGenerator"/> class
+		/// </summary>
 		public GoogleKeyTokenGenerator()
 		{
-			_currentExternalKey = new ExternalKey(0, 0);
+			CurrentExternalKey = new ExternalKey(0, 0);
 		}
 
 		/// <summary>
-		/// <p>Generate the token for a string</p>
+		/// <p>Generate the token for a given string</p>
 		/// </summary>
 		/// <param name="source">The string to receive the token</param>
 		/// <returns>Token for the current string</returns>
@@ -68,7 +95,7 @@ namespace GoogleTranslateFreeApi
 			if (IsExternalKeyObsolete)
 				try
 				{
-					_currentExternalKey = await GetNewExternalKeyAsync();
+					CurrentExternalKey = await GetNewExternalKeyAsync();
 				}
 				catch (ExternalKeyParseException)
 				{
@@ -77,12 +104,12 @@ namespace GoogleTranslateFreeApi
 
 			long time = DecrypthAlgorythm(source);
 
-			return time.ToString() + '.' + (time ^ _currentExternalKey.Time);
+			return time.ToString() + '.' + (time ^ CurrentExternalKey.Time);
 		}
 
 		protected virtual async Task<ExternalKey> GetNewExternalKeyAsync()
 		{
-			HttpWebRequest request = WebRequest.CreateHttp(_address);
+			HttpWebRequest request = WebRequest.CreateHttp(Address);
 			HttpWebResponse response;
 			request.Proxy = Proxy;
 			request.ContinueTimeout = (int)TimeOut.TotalMilliseconds;
@@ -165,7 +192,7 @@ namespace GoogleTranslateFreeApi
 				}
 			}
 
-			long time = _currentExternalKey.Time;
+			long time = CurrentExternalKey.Time;
 
 			foreach (long i in code)
 			{
@@ -175,10 +202,10 @@ namespace GoogleTranslateFreeApi
 
 			Xr(ref time, "+-3^+b+-f");
 
-			time ^= _currentExternalKey.Value;
+			time ^= CurrentExternalKey.Value;
 
 			if (time < 0)
-				time = (time & 2147483647) + 2147483648;
+				time = (time & int.MaxValue) + 2147483648;
 
 			time %= (long)1e6;
 
