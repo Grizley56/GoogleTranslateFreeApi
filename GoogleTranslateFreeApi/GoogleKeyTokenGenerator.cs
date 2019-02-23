@@ -137,7 +137,7 @@ namespace GoogleTranslateFreeApi
 
 			try
 			{
-				var tkkText = result.GetTextBetween(@"TKK='", "';");
+				var tkkText = result.GetTextBetween(@"tkk:'", "',");
 
 				if (tkkText == null)
 					throw new ExternalKeyParseException("Unknown TKK position");

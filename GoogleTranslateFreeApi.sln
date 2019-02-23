@@ -1,9 +1,11 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.25420.1
+# Visual Studio 15
+VisualStudioVersion = 15.0.28307.329
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GoogleTranslateFreeApi", "src\GoogleTranslateFreeApi.csproj", "{76E7BC79-FC5E-4B23-A9A2-2D8DD1079245}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GoogleTranslateFreeApi", "GoogleTranslateFreeApi\GoogleTranslateFreeApi.csproj", "{76E7BC79-FC5E-4B23-A9A2-2D8DD1079245}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GoogleTranslateFreeApi.Examples", "GoogleTranslateFreeApi.Examples\GoogleTranslateFreeApi.Examples.csproj", "{363F637C-1325-4AC2-81F6-78ED53C7D708}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,8 +17,15 @@ Global
 		{76E7BC79-FC5E-4B23-A9A2-2D8DD1079245}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{76E7BC79-FC5E-4B23-A9A2-2D8DD1079245}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{76E7BC79-FC5E-4B23-A9A2-2D8DD1079245}.Release|Any CPU.Build.0 = Release|Any CPU
+		{363F637C-1325-4AC2-81F6-78ED53C7D708}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{363F637C-1325-4AC2-81F6-78ED53C7D708}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{363F637C-1325-4AC2-81F6-78ED53C7D708}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{363F637C-1325-4AC2-81F6-78ED53C7D708}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {5FCCBA11-6766-4834-AA81-18D4309374C5}
 	EndGlobalSection
 EndGlobal

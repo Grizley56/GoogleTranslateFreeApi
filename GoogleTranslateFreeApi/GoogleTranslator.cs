@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -299,7 +301,7 @@ namespace GoogleTranslateFreeApi
 					#if DEBUG
 				  //sometimes response contains members without name. Just ignore it.
 				  Debug.WriteLineIf(partOfSpeech.Trim() != String.Empty, 
-					  $"class {typeof(T).Name} dont contains a member for a part " +
+					  $"class {typeof(T).Name} doesn't contains a member for a part " +
 					  $"of speech {partOfSpeech}");
 					#endif
 			  }
@@ -310,40 +312,40 @@ namespace GoogleTranslateFreeApi
 
 	  protected static string[] GetSeeAlso(JToken response)
 	  {
-		  return !response.HasValues ? new string[0] : response[0].ToObject<string[]>();
+		  return !response.HasValues ? new string[0] : response[0].ToObject<string[]>(); 
 	  }
 	  
 		protected static void GetMainTranslationInfo(JToken translationInfo, out string[] translate, 
 			ref string originalTextTranscription, ref string translatedTextTranscription)
 		{
-
-			bool transcriptionAviable = translationInfo.Count() > 1;
-
-			translate = new string[translationInfo.Count() - (transcriptionAviable ? 1 : 0)];
-
-			for (int i = 0; i < translate.Length; i++)
-				translate[i] = (string)translationInfo[i][0];
-
-
-			if (!transcriptionAviable)
-				return;
-
-			var transcriptionInfo = translationInfo[translationInfo.Count() - 1];
-			int elementsCount = transcriptionInfo.Count();
-
-			if (elementsCount == 3)
+			List<string> translations = new List<string>();
+			
+			foreach (var item in translationInfo)
 			{
-				translatedTextTranscription = (string)transcriptionInfo[elementsCount - 1];
-			}
-			else
-			{
-				if (transcriptionInfo[elementsCount - 2] != null)
-					translatedTextTranscription = (string)transcriptionInfo[elementsCount - 2];
+				if (item.Count() == 5)
+					translations.Add(item.First.Value<string>());
 				else
-					translatedTextTranscription = (string)transcriptionInfo[elementsCount - 1];
+				{
+					var transcriptionInfo = item;
+					int elementsCount = transcriptionInfo.Count();
 
-				originalTextTranscription = (string)transcriptionInfo[elementsCount - 1];
+					if (elementsCount == 3)
+					{
+						translatedTextTranscription = (string)transcriptionInfo[elementsCount - 1];
+					}
+					else
+					{
+						if (transcriptionInfo[elementsCount - 2] != null)
+							translatedTextTranscription = (string)transcriptionInfo[elementsCount - 2];
+						else
+							translatedTextTranscription = (string)transcriptionInfo[elementsCount - 1];
+
+						originalTextTranscription = (string)transcriptionInfo[elementsCount - 1];
+					}
+				}
 			}
+
+			translate = translations.ToArray();
 		}
 
 		protected static Corrections GetTranslationCorrections(JToken response)
