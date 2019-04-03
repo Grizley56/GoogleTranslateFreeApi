@@ -71,14 +71,19 @@ Console.WriteLine(result2.MergedTranslation) // мир
 
 ```C#
 string misspellingsText = "The quik brown fox jumps ovver the lazy dog"
+
 var english = new Language("English language", "en");
-Console.WriteLine(GoogleTranslator.IsLanguageSupported(english)); // true
+// you could also get language from Language static properties
+// for example: Language.English or Language.Korean
+
+// check language is valid for GoogleTranslator class
+Console.WriteLine(GoogleTranslator.IsLanguageSupported(english)); 
+
 var result3 = await translator.TranslateLiteAsync(misspellingsText, english, GoogleTranslator.GetLanguageByISO("ru"));
 
 if(result3.Corrections.TextWasCorrected)
-  foreach(string correctedWord in result3.Corrections.CorrectedWords)
-    Console.WriteLine(correctedWord + " "); // "quick", "over"
-
+	Console.WriteLine(string.Join(",", result3.Corrections.CorrectedWords); // "quick", "over"
+	
 Console.WriteLine(result3.MergedTranslation) // "Быстрая коричневая лиса прыгает через ленивую собаку"
 
 ```
@@ -89,8 +94,7 @@ Console.WriteLine(result3.MergedTranslation) // "Быстрая коричнев
 
 GoogleTranslator translator = new GoogleTranslator();
 
-var result4 = await translator.TranslateAsync(
-  "книга", GoogleTranslator.GetLanguageByName("Russian"), GoogleTranslator.GetLanguageByName("English"));
+var result4 = await translator.TranslateAsync("книга", Language.Russian, Language.English);
 
 if(result.ExtraTranslations != null)
   Console.WriteLine(result.ExtraTranslations.ToString()); // ToString returns friendly for reading string
