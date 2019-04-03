@@ -9,10 +9,11 @@ namespace GoogleTranslateFreeApi.Examples
 
 		static void Main(string[] args)
 		{
-			Language from = GoogleTranslator.GetLanguageByName("English");
-			Language to = GoogleTranslator.GetLanguageByName("Russian");
+			Language english = GoogleTranslator.GetLanguageByName("English"); // define language this way
+			Language russian = Language.Russian; // or even this way
+			Language french = GoogleTranslator.GetLanguageByISO("fr"); // you could also use ISO639 value
 
-			TranslationResult result = Translator.TranslateAsync("Hello. How are you?", from, to).GetAwaiter().GetResult();
+			TranslationResult result = Translator.TranslateAsync("Hello. How are you?", english, russian).GetAwaiter().GetResult();
 
 			Console.WriteLine($"Result 1: {result.MergedTranslation}");
 
@@ -28,8 +29,9 @@ namespace GoogleTranslateFreeApi.Examples
 			}
 
 			TranslationResult result3 =
-				Translator.TranslateAsync("Run", GoogleTranslator.GetLanguageByName("English"),
-					GoogleTranslator.GetLanguageByName("Dutch")).GetAwaiter().GetResult();
+				Translator.TranslateAsync("Run", english, Language.Dutch)
+					.GetAwaiter()
+					.GetResult();
 
 			foreach (var noun in result3.ExtraTranslations.Noun)
 			{

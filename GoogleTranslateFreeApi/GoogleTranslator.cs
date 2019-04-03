@@ -66,14 +66,14 @@ namespace GoogleTranslateFreeApi
 		public static Language[] LanguagesSupported { get; }
 
 		/// <param name="language">Full name of the required language</param>
-		/// <example>GoogleTranslator.GetLangaugeByName("English")</example>
+		/// <example>GoogleTranslator.GetLanguageByName("English")</example>
 		/// <returns>Language object from the LanguagesSupported array</returns>
 		public static Language GetLanguageByName(string language)
 			=> LanguagesSupported.FirstOrDefault(i
 				=> i.FullName.Equals(language, StringComparison.OrdinalIgnoreCase));
 
 	  /// <param name="iso">ISO of the required language</param>
-	  /// <example>GoogleTranslator.GetLangaugeByISO("en")</example>
+	  /// <example>GoogleTranslator.GetLanguageByISO("en")</example>
 	  /// <returns>Language object from the LanguagesSupported array</returns>
 	  // ReSharper disable once InconsistentNaming
 		public static Language GetLanguageByISO(string iso)

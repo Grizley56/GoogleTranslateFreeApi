@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Runtime.Serialization;
 using System.Text;
 using System.Threading.Tasks;
@@ -8,15 +9,39 @@ using System.Threading.Tasks;
 namespace GoogleTranslateFreeApi
 {
 	[DataContract]
-	public class Language
+	public partial class Language
 	{
-		public static Language Auto = new Language("Automatic", "auto");
-		
+		/// <summary>
+		/// Language name ( doesn't affect anything )
+		/// </summary>
 		[DataMember]
-		public string FullName { get; private set; }
-		[DataMember]
-		public string ISO639 { get; private set; }
+		public string FullName { get; }
 
+		/// <summary>
+		/// ISO639  table: <see href="http://stnsoft.com/Muxman/mxp/ISO_639.html"/>
+		/// </summary>
+		[DataMember]
+		public string ISO639 { get; }
+
+		static Language()
+		{
+			Auto = new Language("Automatic", "auto");
+
+			var languages = typeof(Language).GetRuntimeProperties().Where(i => i.IsDefined(typeof(LanguageAttribute)));
+
+			foreach (var language in languages)
+			{
+				var languageAttribute = language.GetCustomAttribute<LanguageAttribute>();
+
+				language.SetValue(null, new Language(languageAttribute.FullName, languageAttribute.Iso639));
+			}
+		}
+
+		/// <summary>
+		/// Creates new Language
+		/// </summary>
+		/// <param name="fullName">Language full name (set what do you want) </param>
+		/// <param name="iso639">ISO639 value</param>
 		public Language(string fullName, string iso639)
 		{
 			FullName = fullName;

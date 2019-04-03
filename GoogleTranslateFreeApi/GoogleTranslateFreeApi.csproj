@@ -50,7 +50,9 @@
     <Compile Include="ITranslatable.cs" />
     <Compile Include="ITranslator.cs" />
     <Compile Include="Language.cs" />
+    <Compile Include="LanguageAttribute.cs" />
     <Compile Include="LanguageIsNotSupportedException.cs" />
+    <Compile Include="Languages.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Proxy.cs" />
     <Compile Include="StringExtension.cs" />
