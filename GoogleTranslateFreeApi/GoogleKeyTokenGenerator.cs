@@ -5,8 +5,10 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
+using System.Runtime;
 
 namespace GoogleTranslateFreeApi
 {
@@ -47,7 +49,6 @@ namespace GoogleTranslateFreeApi
 		/// Address for sending requests
 		/// </summary>
 		protected readonly Uri Address = new Uri("https://translate.google.com");
-
 
 		/// <summary>
 		/// 
@@ -90,6 +91,8 @@ namespace GoogleTranslateFreeApi
 		/// <param name="source">The string to receive the token</param>
 		/// <returns>Token for the current string</returns>
 		/// <exception cref="NotSupportedException">The method is no longer valid, or something went wrong</exception>
+		/// <exception cref="HttpRequestException">Http exception</exception>
+		/// <exception cref="GoogleTranslateIPBannedException"></exception>
 		public virtual async Task<string> GenerateAsync(string source)
 		{
 			if (IsExternalKeyObsolete)
@@ -109,29 +112,43 @@ namespace GoogleTranslateFreeApi
 
 		protected virtual async Task<ExternalKey> GetNewExternalKeyAsync()
 		{
-			HttpWebRequest request = WebRequest.CreateHttp(Address);
-			HttpWebResponse response;
-			request.Proxy = Proxy;
-			request.ContinueTimeout = (int)TimeOut.TotalMilliseconds;
-			request.ContentType = "application/x-www-form-urlencoded";
-			
-			try
-			{
-				response = (HttpWebResponse) await request.GetResponseAsync();
-			}
-			catch (WebException e)
-			{
-				if((int)e.Status == 7) //ProtocolError
-					throw new GoogleTranslateIPBannedException(
-						GoogleTranslateIPBannedException.Operation.TokenGeneration);
-				
-				throw;
-			}
-			
+			HttpClient httpClient;
+
+			if (Proxy == null)
+				httpClient = new HttpClient();
+			else
+				httpClient = new HttpClient(
+					new HttpClientHandler()
+					{
+						Proxy = Proxy,
+						UseProxy = true,
+					});
+
+			httpClient.Timeout = TimeOut;
+
 			string result;
 
-			using (StreamReader streamReader = new StreamReader(response.GetResponseStream()))
-				result = await streamReader.ReadToEndAsync();
+			using (httpClient)
+			{
+				result = await httpClient.GetStringAsync(Address);
+
+				HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Get, Address);
+				//request.Content.Headers.ContentType = new MediaTypeHeaderValue("application/x-www-form-urlencoded");
+
+				HttpResponseMessage response;
+
+				try
+				{
+					response = await httpClient.SendAsync(request);
+				}
+				catch (HttpRequestException ex) when (ex.Message.Contains("503"))
+				{
+					throw new GoogleTranslateIPBannedException(
+						GoogleTranslateIPBannedException.Operation.TokenGeneration);
+				}
+				
+				result = await response.Content.ReadAsStringAsync();
+			}
 
 			long tkk;
 

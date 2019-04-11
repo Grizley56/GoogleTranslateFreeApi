@@ -1,0 +1,718 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>GoogleTranslateFreeApi</name>
+    </assembly>
+    <members>
+        <member name="T:GoogleTranslateFreeApi.GoogleKeyTokenGenerator">
+            <summary>
+            GoogleTranslate token generator
+            </summary>
+        </member>
+        <member name="T:GoogleTranslateFreeApi.GoogleKeyTokenGenerator.ExternalKey">
+            <summary>
+            GoogleTranslate token
+            </summary>
+        </member>
+        <member name="P:GoogleTranslateFreeApi.GoogleKeyTokenGenerator.ExternalKey.Time">
+            <summary>
+            Total hours
+            </summary>
+        </member>
+        <member name="P:GoogleTranslateFreeApi.GoogleKeyTokenGenerator.ExternalKey.Value">
+            <summary>
+            Token value
+            </summary>
+        </member>
+        <member name="M:GoogleTranslateFreeApi.GoogleKeyTokenGenerator.ExternalKey.#ctor(System.Int64,System.Int64)">
+            <param name="time">Unix-formatted total hours</param>
+            <param name="value">Token value</param>
+        </member>
+        <member name="F:GoogleTranslateFreeApi.GoogleKeyTokenGenerator.CurrentExternalKey">
+            <summary>
+            Using external key 
+            </summary>
+        </member>
+        <member name="F:GoogleTranslateFreeApi.GoogleKeyTokenGenerator.Address">
+            <summary>
+            Address for sending requests
+            </summary>
+        </member>
+        <member name="P:GoogleTranslateFreeApi.GoogleKeyTokenGenerator.UnixTotalHours">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:GoogleTranslateFreeApi.GoogleKeyTokenGenerator.IsExternalKeyObsolete">
+            <summary>
+            True, if the current key cannot be used for a token generate
+            </summary>
+        </member>
+        <member name="P:GoogleTranslateFreeApi.GoogleKeyTokenGenerator.Proxy">
+            <summary>
+            The proxy server that is used to send requests
+            </summary>
+        </member>
+        <member name="P:GoogleTranslateFreeApi.GoogleKeyTokenGenerator.TimeOut">
+            <summary>
+            Requests timeout
+            </summary>
+        </member>
+        <member name="M:GoogleTranslateFreeApi.GoogleKeyTokenGenerator.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:GoogleTranslateFreeApi.GoogleKeyTokenGenerator"/> class
+            </summary>
+        </member>
+        <member name="M:GoogleTranslateFreeApi.GoogleKeyTokenGenerator.GenerateAsync(System.String)">
+            <summary>
+            <p>Generate the token for a given string</p>
+            </summary>
+            <param name="source">The string to receive the token</param>
+            <returns>Token for the current string</returns>
+            <exception cref="T:System.NotSupportedException">The method is no longer valid, or something went wrong</exception>
+            <exception cref="T:System.Net.Http.HttpRequestException">Http exception</exception>
+            <exception cref="T:GoogleTranslateFreeApi.GoogleTranslateIPBannedException"></exception>
+        </member>
+        <member name="T:GoogleTranslateFreeApi.GoogleTranslator">
+            <summary>
+            Represent a class for translate the text using <see href="http://translate.google.com"/>
+            </summary>
+        </member>
+        <member name="P:GoogleTranslateFreeApi.GoogleTranslator.TimeOut">
+            <summary>
+            Requests timeout
+            </summary>
+        </member>
+        <member name="P:GoogleTranslateFreeApi.GoogleTranslator.Proxy">
+            <summary>
+            Requests proxy
+            </summary>
+        </member>
+        <member name="P:GoogleTranslateFreeApi.GoogleTranslator.LanguagesSupported">
+            <summary>
+            An Array of supported languages by google translate
+            </summary>
+        </member>
+        <member name="M:GoogleTranslateFreeApi.GoogleTranslator.GetLanguageByName(System.String)">
+            <param name="language">Full name of the required language</param>
+            <example>GoogleTranslator.GetLanguageByName("English")</example>
+            <returns>Language object from the LanguagesSupported array</returns>
+        </member>
+        <member name="M:GoogleTranslateFreeApi.GoogleTranslator.GetLanguageByISO(System.String)">
+            <param name="iso">ISO of the required language</param>
+            <example>GoogleTranslator.GetLanguageByISO("en")</example>
+            <returns>Language object from the LanguagesSupported array</returns>
+        </member>
+        <member name="M:GoogleTranslateFreeApi.GoogleTranslator.IsLanguageSupported(GoogleTranslateFreeApi.Language)">
+            <summary>
+            Check is available language to translate
+            </summary>
+            <param name="language">Checked <see cref="T:GoogleTranslateFreeApi.Language"/> </param>
+            <returns>Is it available language or not</returns>
+        </member>
+        <member name="M:GoogleTranslateFreeApi.GoogleTranslator.#ctor(System.String)">
+            <param name="domain">A Domain name which will be used to execute requests</param>
+        </member>
+        <member name="M:GoogleTranslateFreeApi.GoogleTranslator.TranslateAsync(System.String,GoogleTranslateFreeApi.Language,GoogleTranslateFreeApi.Language)">
+            <summary>
+            <p>
+            Async text translation from language to language. Include full information about the translation.
+            </p>
+            </summary>
+            <param name="originalText">Text to translate</param>
+            <param name="fromLanguage">Source language</param>
+            <param name="toLanguage">Target language</param>
+            <exception cref="T:GoogleTranslateFreeApi.LanguageIsNotSupportedException">Language is not supported</exception>
+            <exception cref="T:System.InvalidOperationException">Thrown when target language is auto</exception>
+            <exception cref="T:GoogleTranslateFreeApi.GoogleTranslateIPBannedException">Thrown when the IP used for requests is banned </exception>
+            <exception cref="T:System.Net.Http.HttpRequestException">Thrown when getting the HTTP exception</exception>
+        </member>
+        <member name="M:GoogleTranslateFreeApi.GoogleTranslator.TranslateAsync(GoogleTranslateFreeApi.ITranslatable)">
+            <summary>
+            <p>
+            Async text translation from language to language. Include full information about the translation.
+            </p>
+            </summary>
+            <param name="item">The object that implements the interface ITranslatable</param>
+            <exception cref="T:GoogleTranslateFreeApi.LanguageIsNotSupportedException">Language is not supported</exception>
+            <exception cref="T:System.InvalidOperationException">Thrown when target language is auto</exception>
+            <exception cref="T:GoogleTranslateFreeApi.GoogleTranslateIPBannedException">Thrown when the IP used for requests is banned </exception>
+            <exception cref="T:System.Net.Http.HttpRequestException">Thrown when getting the HTTP exception</exception>
+        </member>
+        <member name="M:GoogleTranslateFreeApi.GoogleTranslator.TranslateLiteAsync(System.String,GoogleTranslateFreeApi.Language,GoogleTranslateFreeApi.Language)">
+            <summary>
+            <p>
+            Async text translation from language to language. 
+            In contrast to the TranslateAsync doesn't include additional information such as ExtraTranslation and Definition.
+            </p>
+            </summary>
+            <param name="originalText">Text to translate</param>
+            <param name="fromLanguage">Source language</param>
+            <param name="toLanguage">Target language</param>
+            <exception cref="T:GoogleTranslateFreeApi.LanguageIsNotSupportedException">Language is not supported</exception>
+            <exception cref="T:System.InvalidOperationException">Thrown when target language is auto</exception>
+            <exception cref="T:GoogleTranslateFreeApi.GoogleTranslateIPBannedException">Thrown when the IP used for requests is banned </exception>
+            <exception cref="T:System.Net.Http.HttpRequestException">Thrown when getting the HTTP exception</exception>
+        </member>
+        <member name="M:GoogleTranslateFreeApi.GoogleTranslator.TranslateLiteAsync(GoogleTranslateFreeApi.ITranslatable)">
+            <summary>
+            <p>
+            Async text translation from language to language. 
+            In contrast to the TranslateAsync doesn't include additional information such as ExtraTranslation and Definition.
+            </p>
+            </summary>
+            <param name="item">The object that implements the interface ITranslatable</param>
+            <exception cref="T:GoogleTranslateFreeApi.LanguageIsNotSupportedException">Language is not supported</exception>
+            <exception cref="T:System.InvalidOperationException">Thrown when target language is auto</exception>
+            <exception cref="T:GoogleTranslateFreeApi.GoogleTranslateIPBannedException">Thrown when the IP used for requests is banned</exception>
+            <exception cref="T:System.Net.Http.HttpRequestException">Thrown when getting the HTTP exception</exception>
+        </member>
+        <member name="T:GoogleTranslateFreeApi.Language">
+            <summary>
+            Represents language
+            </summary>
+        </member>
+        <member name="P:GoogleTranslateFreeApi.Language.FullName">
+            <summary>
+            Language name ( doesn't affect anything )
+            </summary>
+        </member>
+        <member name="P:GoogleTranslateFreeApi.Language.ISO639">
+            <summary>
+            ISO639  table: <see href="http://stnsoft.com/Muxman/mxp/ISO_639.html"/>
+            </summary>
+        </member>
+        <member name="M:GoogleTranslateFreeApi.Language.#ctor(System.String,System.String)">
+            <summary>
+            Creates new Language
+            </summary>
+            <param name="fullName">Language full name (set what do you want) </param>
+            <param name="iso639">ISO639 value</param>
+        </member>
+        <member name="P:GoogleTranslateFreeApi.Language.Auto">
+            <summary>
+            Auto Detection Language
+            </summary>
+        </member>
+        <member name="P:GoogleTranslateFreeApi.Language.Afrikaans">
+            <summary>
+            Afrikaans Language
+            </summary>
+        </member>
+        <member name="P:GoogleTranslateFreeApi.Language.Albanian">
+            <summary>
+            Albanian Language
+            </summary>
+        </member>
+        <member name="P:GoogleTranslateFreeApi.Language.Amharic">
+            <summary>
+            Amharic Language
+            </summary>
+        </member>
+        <member name="P:GoogleTranslateFreeApi.Language.Arabic">
+            <summary>
+            Arabic Language
+            </summary>
+        </member>
+        <member name="P:GoogleTranslateFreeApi.Language.Armenian">
+            <summary>
+            Armenian Language
+            </summary>
+        </member>
+        <member name="P:GoogleTranslateFreeApi.Language.Azerbaijani">
+            <summary>
+            Azerbaijani Language
+            </summary>
+        </member>
+        <member name="P:GoogleTranslateFreeApi.Language.Basque">
+            <summary>
+            Basque Language
+            </summary>
+        </member>
+        <member name="P:GoogleTranslateFreeApi.Language.Belarusian">
+            <summary>
+            Belarusian Language
+            </summary>
+        </member>
+        <member name="P:GoogleTranslateFreeApi.Language.Bengali">
+            <summary>
+            Bengali Language
+            </summary>
+        </member>
+        <member name="P:GoogleTranslateFreeApi.Language.Bosnian">
+            <summary>
+            Bosnian Language
+            </summary>
+        </member>
+        <member name="P:GoogleTranslateFreeApi.Language.Bulgarian">
+            <summary>
+            Bulgarian Language
+            </summary>
+        </member>
+        <member name="P:GoogleTranslateFreeApi.Language.Catalan">
+            <summary>
+            Catalan Language
+            </summary>
+        </member>
+        <member name="P:GoogleTranslateFreeApi.Language.Cebuano">
+            <summary>
+            Cebuano Language
+            </summary>
+        </member>
+        <member name="P:GoogleTranslateFreeApi.Language.Chichewa">
+            <summary>
+            Chichewa Language
+            </summary>
+        </member>
+        <member name="P:GoogleTranslateFreeApi.Language.ChineseSimplified">
+            <summary>
+            Chinese Simplified Language
+            </summary>
+        </member>
+        <member name="P:GoogleTranslateFreeApi.Language.ChineseTraditional">
+            <summary>
+            Chinese Traditional Language
+            </summary>
+        </member>
+        <member name="P:GoogleTranslateFreeApi.Language.Corsican">
+            <summary>
+            Corsican Language
+            </summary>
+        </member>
+        <member name="P:GoogleTranslateFreeApi.Language.Croatian">
+            <summary>
+            Croatian Language
+            </summary>
+        </member>
+        <member name="P:GoogleTranslateFreeApi.Language.Czech">
+            <summary>
+            Czech Language
+            </summary>
+        </member>
+        <member name="P:GoogleTranslateFreeApi.Language.Danish">
+            <summary>
+            Danish Language
+            </summary>
+        </member>
+        <member name="P:GoogleTranslateFreeApi.Language.Dutch">
+            <summary>
+            Dutch Language
+            </summary>
+        </member>
+        <member name="P:GoogleTranslateFreeApi.Language.English">
+            <summary>
+            English Language
+            </summary>
+        </member>
+        <member name="P:GoogleTranslateFreeApi.Language.Esperanto">
+            <summary>
+            Esperanto Language
+            </summary>
+        </member>
+        <member name="P:GoogleTranslateFreeApi.Language.Estonian">
+            <summary>
+            Estonian Language
+            </summary>
+        </member>
+        <member name="P:GoogleTranslateFreeApi.Language.Filipino">
+            <summary>
+            Filipino Language
+            </summary>
+        </member>
+        <member name="P:GoogleTranslateFreeApi.Language.Finnish">
+            <summary>
+            Finnish Language
+            </summary>
+        </member>
+        <member name="P:GoogleTranslateFreeApi.Language.French">
+            <summary>
+            French Language
+            </summary>
+        </member>
+        <member name="P:GoogleTranslateFreeApi.Language.Frisian">
+            <summary>
+            Frisian Language
+            </summary>
+        </member>
+        <member name="P:GoogleTranslateFreeApi.Language.Galician">
+            <summary>
+            Galician Language
+            </summary>
+        </member>
+        <member name="P:GoogleTranslateFreeApi.Language.Georgian">
+            <summary>
+            Georgian Language
+            </summary>
+        </member>
+        <member name="P:GoogleTranslateFreeApi.Language.German">
+            <summary>
+            German Language
+            </summary>
+        </member>
+        <member name="P:GoogleTranslateFreeApi.Language.Greek">
+            <summary>
+            Greek Language
+            </summary>
+        </member>
+        <member name="P:GoogleTranslateFreeApi.Language.Gujarati">
+            <summary>
+            Gujarati Language
+            </summary>
+        </member>
+        <member name="P:GoogleTranslateFreeApi.Language.HaitianCreole">
+            <summary>
+            Haitian Creole Language
+            </summary>
+        </member>
+        <member name="P:GoogleTranslateFreeApi.Language.Hausa">
+            <summary>
+            Hausa Language
+            </summary>
+        </member>
+        <member name="P:GoogleTranslateFreeApi.Language.Hawaiian">
+            <summary>
+            Hawaiian Language
+            </summary>
+        </member>
+        <member name="P:GoogleTranslateFreeApi.Language.Hebrew">
+            <summary>
+            Hebrew Language
+            </summary>
+        </member>
+        <member name="P:GoogleTranslateFreeApi.Language.Hindi">
+            <summary>
+            Hindi Language
+            </summary>
+        </member>
+        <member name="P:GoogleTranslateFreeApi.Language.Hmong">
+            <summary>
+            Hmong Language
+            </summary>
+        </member>
+        <member name="P:GoogleTranslateFreeApi.Language.Hungarian">
+            <summary>
+            Hungarian Language
+            </summary>
+        </member>
+        <member name="P:GoogleTranslateFreeApi.Language.Icelandic">
+            <summary>
+            Icelandic Language
+            </summary>
+        </member>
+        <member name="P:GoogleTranslateFreeApi.Language.Igbo">
+            <summary>
+            Igbo Language
+            </summary>
+        </member>
+        <member name="P:GoogleTranslateFreeApi.Language.Indonesian">
+            <summary>
+            Indonesian Language
+            </summary>
+        </member>
+        <member name="P:GoogleTranslateFreeApi.Language.Irish">
+            <summary>
+            Irish Language
+            </summary>
+        </member>
+        <member name="P:GoogleTranslateFreeApi.Language.Italian">
+            <summary>
+            Italian Language
+            </summary>
+        </member>
+        <member name="P:GoogleTranslateFreeApi.Language.Japanese">
+            <summary>
+            Japanese Language
+            </summary>
+        </member>
+        <member name="P:GoogleTranslateFreeApi.Language.Javanese">
+            <summary>
+            Javanese Language
+            </summary>
+        </member>
+        <member name="P:GoogleTranslateFreeApi.Language.Kannada">
+            <summary>
+            Kannada Language
+            </summary>
+        </member>
+        <member name="P:GoogleTranslateFreeApi.Language.Kazakh">
+            <summary>
+            Kazakh Language
+            </summary>
+        </member>
+        <member name="P:GoogleTranslateFreeApi.Language.Khmer">
+            <summary>
+            Khmer Language
+            </summary>
+        </member>
+        <member name="P:GoogleTranslateFreeApi.Language.Korean">
+            <summary>
+            Korean Language
+            </summary>
+        </member>
+        <member name="P:GoogleTranslateFreeApi.Language.KurdishKurmanji">
+            <summary>
+            Kurdish (Kurmanji) Language
+            </summary>
+        </member>
+        <member name="P:GoogleTranslateFreeApi.Language.Kyrgyz">
+            <summary>
+            Kyrgyz Language
+            </summary>
+        </member>
+        <member name="P:GoogleTranslateFreeApi.Language.Lao">
+            <summary>
+            Lao Language
+            </summary>
+        </member>
+        <member name="P:GoogleTranslateFreeApi.Language.Latin">
+            <summary>
+            Latin Language
+            </summary>
+        </member>
+        <member name="P:GoogleTranslateFreeApi.Language.Latvian">
+            <summary>
+            Latvian Language
+            </summary>
+        </member>
+        <member name="P:GoogleTranslateFreeApi.Language.Lithuanian">
+            <summary>
+            Lithuanian Language
+            </summary>
+        </member>
+        <member name="P:GoogleTranslateFreeApi.Language.Luxembourgish">
+            <summary>
+            Luxembourgish Language
+            </summary>
+        </member>
+        <member name="P:GoogleTranslateFreeApi.Language.Macedonian">
+            <summary>
+            Macedonian Language
+            </summary>
+        </member>
+        <member name="P:GoogleTranslateFreeApi.Language.Malagasy">
+            <summary>
+            Malagasy Language
+            </summary>
+        </member>
+        <member name="P:GoogleTranslateFreeApi.Language.Malay">
+            <summary>
+            Malay Language
+            </summary>
+        </member>
+        <member name="P:GoogleTranslateFreeApi.Language.Malayalam">
+            <summary>
+            Malayalam Language
+            </summary>
+        </member>
+        <member name="P:GoogleTranslateFreeApi.Language.Maltese">
+            <summary>
+            Maltese Language
+            </summary>
+        </member>
+        <member name="P:GoogleTranslateFreeApi.Language.Maori">
+            <summary>
+            Maori Language
+            </summary>
+        </member>
+        <member name="P:GoogleTranslateFreeApi.Language.Marathi">
+            <summary>
+            Marathi Language
+            </summary>
+        </member>
+        <member name="P:GoogleTranslateFreeApi.Language.Mongolian">
+            <summary>
+            Mongolian Language
+            </summary>
+        </member>
+        <member name="P:GoogleTranslateFreeApi.Language.MyanmarBurmese">
+            <summary>
+            Myanmar (Burmese) Language
+            </summary>
+        </member>
+        <member name="P:GoogleTranslateFreeApi.Language.Nepali">
+            <summary>
+            Nepali Language
+            </summary>
+        </member>
+        <member name="P:GoogleTranslateFreeApi.Language.Norwegian">
+            <summary>
+            Norwegian Language
+            </summary>
+        </member>
+        <member name="P:GoogleTranslateFreeApi.Language.Pashto">
+            <summary>
+            Pashto Language
+            </summary>
+        </member>
+        <member name="P:GoogleTranslateFreeApi.Language.Persian">
+            <summary>
+            Persian Language
+            </summary>
+        </member>
+        <member name="P:GoogleTranslateFreeApi.Language.Polish">
+            <summary>
+            Polish Language
+            </summary>
+        </member>
+        <member name="P:GoogleTranslateFreeApi.Language.Portuguese">
+            <summary>
+            Portuguese Language
+            </summary>
+        </member>
+        <member name="P:GoogleTranslateFreeApi.Language.Punjabi">
+            <summary>
+            Punjabi Language
+            </summary>
+        </member>
+        <member name="P:GoogleTranslateFreeApi.Language.Romanian">
+            <summary>
+            Romanian Language
+            </summary>
+        </member>
+        <member name="P:GoogleTranslateFreeApi.Language.Russian">
+            <summary>
+            Russian Language
+            </summary>
+        </member>
+        <member name="P:GoogleTranslateFreeApi.Language.Samoan">
+            <summary>
+            Samoan Language
+            </summary>
+        </member>
+        <member name="P:GoogleTranslateFreeApi.Language.ScotsGaelic">
+            <summary>
+            Scots Gaelic Language
+            </summary>
+        </member>
+        <member name="P:GoogleTranslateFreeApi.Language.Serbian">
+            <summary>
+            Serbian Language
+            </summary>
+        </member>
+        <member name="P:GoogleTranslateFreeApi.Language.Sesotho">
+            <summary>
+            Sesotho Language
+            </summary>
+        </member>
+        <member name="P:GoogleTranslateFreeApi.Language.Shona">
+            <summary>
+            Shona Language
+            </summary>
+        </member>
+        <member name="P:GoogleTranslateFreeApi.Language.Sindhi">
+            <summary>
+            Sindhi Language
+            </summary>
+        </member>
+        <member name="P:GoogleTranslateFreeApi.Language.Sinhala">
+            <summary>
+            Sinhala Language
+            </summary>
+        </member>
+        <member name="P:GoogleTranslateFreeApi.Language.Slovak">
+            <summary>
+            Slovak Language
+            </summary>
+        </member>
+        <member name="P:GoogleTranslateFreeApi.Language.Slovenian">
+            <summary>
+            Slovenian Language
+            </summary>
+        </member>
+        <member name="P:GoogleTranslateFreeApi.Language.Somali">
+            <summary>
+            Somali Language
+            </summary>
+        </member>
+        <member name="P:GoogleTranslateFreeApi.Language.Spanish">
+            <summary>
+            Spanish Language
+            </summary>
+        </member>
+        <member name="P:GoogleTranslateFreeApi.Language.Sundanese">
+            <summary>
+            Sundanese Language
+            </summary>
+        </member>
+        <member name="P:GoogleTranslateFreeApi.Language.Swahili">
+            <summary>
+            Swahili Language
+            </summary>
+        </member>
+        <member name="P:GoogleTranslateFreeApi.Language.Swedish">
+            <summary>
+            Swedish Language
+            </summary>
+        </member>
+        <member name="P:GoogleTranslateFreeApi.Language.Tajik">
+            <summary>
+            Tajik Language
+            </summary>
+        </member>
+        <member name="P:GoogleTranslateFreeApi.Language.Tamil">
+            <summary>
+            Tamil Language
+            </summary>
+        </member>
+        <member name="P:GoogleTranslateFreeApi.Language.Telugu">
+            <summary>
+            Telugu Language
+            </summary>
+        </member>
+        <member name="P:GoogleTranslateFreeApi.Language.Thai">
+            <summary>
+            Thai Language
+            </summary>
+        </member>
+        <member name="P:GoogleTranslateFreeApi.Language.Turkish">
+            <summary>
+            Turkish Language
+            </summary>
+        </member>
+        <member name="P:GoogleTranslateFreeApi.Language.Ukrainian">
+            <summary>
+            Ukrainian Language
+            </summary>
+        </member>
+        <member name="P:GoogleTranslateFreeApi.Language.Urdu">
+            <summary>
+            Urdu Language
+            </summary>
+        </member>
+        <member name="P:GoogleTranslateFreeApi.Language.Uzbek">
+            <summary>
+            Uzbek Language
+            </summary>
+        </member>
+        <member name="P:GoogleTranslateFreeApi.Language.Vietnamese">
+            <summary>
+            Vietnamese Language
+            </summary>
+        </member>
+        <member name="P:GoogleTranslateFreeApi.Language.Welsh">
+            <summary>
+            Welsh Language
+            </summary>
+        </member>
+        <member name="P:GoogleTranslateFreeApi.Language.Xhosa">
+            <summary>
+            Xhosa Language
+            </summary>
+        </member>
+        <member name="P:GoogleTranslateFreeApi.Language.Yiddish">
+            <summary>
+            Yiddish Language
+            </summary>
+        </member>
+        <member name="P:GoogleTranslateFreeApi.Language.Yoruba">
+            <summary>
+            Yoruba Language
+            </summary>
+        </member>
+        <member name="P:GoogleTranslateFreeApi.Language.Zulu">
+            <summary>
+            Zulu Language
+            </summary>
+        </member>
+    </members>
+</doc>
