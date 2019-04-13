@@ -1,6 +1,12 @@
 # GoogleTranslateFreeApi
 Api for free text translation using Google translate.
 
+| 	                   |  	Badge		|
+| -------------------------|:------------------:|
+| **Target Framework**     | [![.Net Standard 1.1](https://img.shields.io/badge/.NET%20Standard-1.1-green.svg)](https://docs.microsoft.com/ru-ru/dotnet/standard/net-standard) |
+| **Nuget**		   | [![Nuget](https://img.shields.io/nuget/v/GoogleTranslateFreeApi.svg)](https://www.nuget.org/packages/GoogleTranslateFreeApi/)
+| **License** 		   | [![MIT](https://img.shields.io/github/license/Grizley56/GoogleTranslateFreeApi.svg)](https://opensource.org/licenses/MIT) |
+
 Main features:
 - [x] Text corrections
 - [x] Language corrections
