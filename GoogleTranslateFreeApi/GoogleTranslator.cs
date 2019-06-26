@@ -324,7 +324,7 @@ namespace GoogleTranslateFreeApi
 			
 			foreach (var item in translationInfo)
 			{
-				if (item.Count() == 5)
+				if (item.Count() >= 5)
 					translations.Add(item.First.Value<string>());
 				else
 				{
