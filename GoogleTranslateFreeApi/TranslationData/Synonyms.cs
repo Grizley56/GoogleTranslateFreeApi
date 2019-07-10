@@ -48,7 +48,7 @@ namespace GoogleTranslateFreeApi.TranslationData
 
 		internal override bool TryParseMemberAndAdd(string memberName, JToken parseInformation)
 		{
-			PropertyInfo property = this.GetType().GetRuntimeProperty(memberName.ToCamelCase());
+			PropertyInfo property = GetType().GetRuntimeProperty(memberName.ToCamelCase());
 			if (property == null)
 				return false;
 			

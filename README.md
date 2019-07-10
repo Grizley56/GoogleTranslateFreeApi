@@ -56,20 +56,23 @@ string transcription = result.TranslatedTextTranscription; // Kon'nichiwa! Ogenk
 ---
 <p align="center"><b>Language auto detection and correction</b></p>
 
-```C#
 
-Language detectedLanguage = result.SourceLanguage;
-Console.WriteLine(detectedLanguage.FullName);
-// English
-Console.WriteLine("Confidence: " + result.Corrections.Confidence); // number from 0 to 1
+```C#
+var result2 = await translator.TranslateLiteAsync("Drones", Language.Auto, Language.Czech);
+
+foreach(LanguageDetection languageDetection in result2.LanguageDetections)
+{
+	Console.WriteLine(languageDetection);
+}
+
+// The output will be next. Double in brackets is confidence
+// Spanish (0.61010)
+// English (0.34365)
 
 Language spanish = new Language("Spanish", "es"); // For the method, only the second parameter is important (ISO639)
 
-var result2 = await translator.TranslateLiteAsync("world", spanish, GoogleTranslator.GetLanguageByName("Russian"));
-
-if(result2.Corrections.LanguageWasCorrected) // true
-  Console.WriteLine($"The source language has been changed to {result2.Corrections.CorrectedLanguage.FullName}");
-
+result2 = await translator.TranslateLiteAsync("world", spanish, Language.Czech);
+Console.WriteLine(result2.LanguageDetections.First()); // English (0.98828)
 Console.WriteLine(result2.MergedTranslation) // мир
 ```
 ---

@@ -191,8 +191,16 @@ namespace GoogleTranslateFreeApi
 			if (toLanguage.Equals(Language.Auto))
 				throw new InvalidOperationException("A destination Language is auto");
 
-			if (originalText.Trim() == String.Empty)
-				return new TranslationResult();
+			if (originalText.Trim() == string.Empty)
+			{
+				return new TranslationResult()
+				{
+					OriginalText = originalText, 
+					FragmentedTranslation = new string[0], 
+					SourceLanguage = fromLanguage, 
+					TargetLanguage = toLanguage
+				};
+			}
 
 			string token = await _generator.GenerateAsync(originalText);
 
@@ -240,14 +248,13 @@ namespace GoogleTranslateFreeApi
 			JToken tmp = JsonConvert.DeserializeObject<JToken>(result);
 			
 			string originalTextTranscription = null, translatedTextTranscription = null;
-			string[] translate;
 
 			var mainTranslationInfo = tmp[0];
 
-			GetMainTranslationInfo(mainTranslationInfo, out translate,
+			GetMainTranslationInfo(mainTranslationInfo, out var translation,
 				ref originalTextTranscription, ref translatedTextTranscription);
 			
-			translationResult.FragmentedTranslation = translate;
+			translationResult.FragmentedTranslation = translation;
 			translationResult.OriginalText = sourceText;
 
 			translationResult.OriginalTextTranscription = originalTextTranscription;
@@ -255,11 +262,12 @@ namespace GoogleTranslateFreeApi
 
 			translationResult.Corrections = GetTranslationCorrections(tmp);
 
-			translationResult.SourceLanguage = sourceLanguage.Equals(Language.Auto) 
-				? GetLanguageByISO( (string)tmp[8][0][0] ) 
-				: sourceLanguage;
-			
+			translationResult.SourceLanguage = sourceLanguage;
 			translationResult.TargetLanguage = targetLanguage;
+
+			if (tmp[8] is JArray languageDetections)
+				translationResult.LanguageDetections = GetLanguageDetections(languageDetections).ToArray();
+
 
 			if (!additionInfo) 
 				return translationResult;
@@ -281,8 +289,9 @@ namespace GoogleTranslateFreeApi
 
 			return translationResult;
 		}
-	  
-	  protected static T TranslationInfoParse<T>(JToken response) where T : TranslationInfoParser
+
+
+		protected static T TranslationInfoParse<T>(JToken response) where T : TranslationInfoParser
 	  {
 		  if (!response.HasValues)
 			  return null;
@@ -375,18 +384,21 @@ namespace GoogleTranslateFreeApi
 				corrections.TextWasCorrected = true;
 			}
 
-			string selectedLangauge = (string)response[2];
-			string detectedLanguage = (string)(response[8])[0][0];
-
-			if (selectedLangauge != detectedLanguage)
-			{
-				corrections.LanguageWasCorrected = true;
-				corrections.CorrectedLanguage = LanguagesSupported.FirstOrDefault(language =>
-					language.ISO639 == detectedLanguage);
-			}
-			corrections.Confidence =  (double)response[6];
-			
 			return corrections;
+		}
+
+		protected IEnumerable<LanguageDetection> GetLanguageDetections(JArray item)
+		{
+			JArray languages = item[0] as JArray;
+			JArray confidences = item[2] as JArray;
+
+			if (languages == null || confidences == null || languages.Count != confidences.Count)
+				yield break;
+
+			for (int i = 0; i < languages.Count; i++)
+			{
+				yield return new LanguageDetection(GetLanguageByISO((string) languages[i]), (double) confidences[i]);
+			}
 		}
   }
 }
