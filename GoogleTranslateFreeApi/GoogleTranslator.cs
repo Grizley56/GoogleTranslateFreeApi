@@ -218,12 +218,15 @@ namespace GoogleTranslateFreeApi
 												"tsel=0&" +
 												"kc=7";
 
-			string result;
+			HttpResponseMessage result;
+            string response;
 
-			try
+            try
 			{
-				result = await _httpClient.GetStringAsync($"{Address}?{postData}");
-			}
+                var t = Task.Run(() => GetResponseFromURI(new Uri($"{Address}?{postData}")));
+                t.Wait();
+                response = t.Result;
+            }
 			catch (HttpRequestException ex) when (ex.Message.Contains("503"))
 			{
 				throw new GoogleTranslateIPBannedException(GoogleTranslateIPBannedException.Operation.Translation);
@@ -237,10 +240,21 @@ namespace GoogleTranslateFreeApi
 			}
 
 
-			return ResponseToTranslateResultParse(result, originalText, fromLanguage, toLanguage, additionInfo);
+			return ResponseToTranslateResultParse(response, originalText, fromLanguage, toLanguage, additionInfo);
 	  }
-	  
-		protected virtual TranslationResult ResponseToTranslateResultParse(string result, string sourceText, 
+         async Task<string> GetResponseFromURI(Uri u)
+        {
+            var response = "";
+           
+                HttpResponseMessage result = await _httpClient.GetAsync(u);
+                if (result.IsSuccessStatusCode)
+                {
+                    response = await result.Content.ReadAsStringAsync();
+                }
+            
+            return response;
+        }
+        protected virtual TranslationResult ResponseToTranslateResultParse(string result, string sourceText, 
 			Language sourceLanguage, Language targetLanguage, bool additionInfo)
 		{
 			TranslationResult translationResult = new TranslationResult();
