@@ -112,8 +112,9 @@ namespace GoogleTranslateFreeApi
 
 		protected virtual async Task<ExternalKey> GetNewExternalKeyAsync()
 		{
-			HttpClient httpClient;
-
+          
+            HttpClient httpClient;
+           
 			if (Proxy == null)
 				httpClient = new HttpClient();
 			else
@@ -130,24 +131,15 @@ namespace GoogleTranslateFreeApi
 
 			using (httpClient)
 			{
-				result = await httpClient.GetStringAsync(Address);
+                var response = httpClient.GetAsync(Address).Result;
 
-				HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Get, Address);
-				//request.Content.Headers.ContentType = new MediaTypeHeaderValue("application/x-www-form-urlencoded");
-
-				HttpResponseMessage response;
-
-				try
-				{
-					response = await httpClient.SendAsync(request);
-				}
-				catch (HttpRequestException ex) when (ex.Message.Contains("503"))
-				{
-					throw new GoogleTranslateIPBannedException(
-						GoogleTranslateIPBannedException.Operation.TokenGeneration);
-				}
-				
-				result = await response.Content.ReadAsStringAsync();
+                try
+                {
+                    result = response.Content.ReadAsStringAsync().Result;
+                }catch(HttpRequestException ex)
+                {
+                    throw new GoogleTranslateIPBannedException(GoogleTranslateIPBannedException.Operation.TokenGeneration);
+                }
 			}
 
 			long tkk;
